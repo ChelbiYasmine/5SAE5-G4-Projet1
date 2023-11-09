@@ -20,5 +20,18 @@ pipeline {
                 sh 'mvn deploy'
             }
         }
+        stage('Checkout') {
+            steps {
+                // Étape de vérification du code depuis le référentiel Git
+                checkout scm
+            }
+        }
+
+        stage('Build and Test') {
+            steps {
+                // Étape pour exécuter Maven et lancer les tests
+                sh 'mvn clean test'
+            }
+         }
     }
 }

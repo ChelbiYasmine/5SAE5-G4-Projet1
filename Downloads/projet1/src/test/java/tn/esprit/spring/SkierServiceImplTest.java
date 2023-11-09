@@ -31,12 +31,12 @@ public class SkierServiceImplTest {
 
     private ISubscriptionRepository subscriptionRepository;
     @Autowired
-    SkierServicesImpl ss;
+    SkierServicesImpl skierServices;
 
     @BeforeTestClass
     public void setUp() {
         // Initialisez l'instance de votre service ou utilisez l'injection de dépendances.
-        ss = new SkierServicesImpl(skierRepository,pisteRepository,courseRepository,registrationRepository,subscriptionRepository); // Remplacez SkierServiceImpl par la classe réelle de votre service.
+        skierServices = new SkierServicesImpl(skierRepository,pisteRepository,courseRepository,registrationRepository,subscriptionRepository); // Remplacez SkierServiceImpl par la classe réelle de votre service.
     }
 
     @Test
@@ -48,7 +48,7 @@ public class SkierServiceImplTest {
         // Initialisez les propriétés du skieur et de la souscription
 
         // Appelez la méthode assignSkierToSubscription
-        Skier assignedSkier = ss.assignSkierToSubscription(skier.getNumSkier(), subscription.getNumSub());
+        Skier assignedSkier = skierServices.assignSkierToSubscription(skier.getNumSkier(), subscription.getNumSub());
 
         // Vérifiez si la souscription du skieur correspond à celle que vous avez assignée
         assertEquals(subscription, assignedSkier.getSubscription());
@@ -62,7 +62,7 @@ public class SkierServiceImplTest {
         // Initialisez les propriétés du skieur et du cours
 
         // Appelez la méthode addSkierAndAssignToCourse
-        Skier assignedSkier = ss.addSkierAndAssignToCourse(skier, course.getNumCourse());
+        Skier assignedSkier = skierServices.addSkierAndAssignToCourse(skier, course.getNumCourse());
 
         // Vérifiez si le skieur a été correctement assigné au cours
         assertTrue(assignedSkier.getRegistrations().stream()
@@ -73,23 +73,23 @@ public class SkierServiceImplTest {
     public void testRemoveSkier() {
         // Créez un skieur fictif
         Skier skier = new Skier();
-        skier = ss.addSkier(skier);
+        skier = skierServices.addSkier(skier);
 
         // Appelez la méthode removeSkier
-        ss.removeSkier(skier.getNumSkier());
+        skierServices.removeSkier(skier.getNumSkier());
 
         // Vérifiez si le skieur a été supprimé en essayant de le récupérer (doit renvoyer null)
-        assertNull(ss.retrieveSkier(skier.getNumSkier()));
+        assertNull(skierServices.retrieveSkier(skier.getNumSkier()));
     }
     @Test
     @Order(3)
     public void testRetrieveSkier() {
         // Créez un skieur fictif
         Skier skier = new Skier();
-        skier = ss.addSkier(skier);
+        skier = skierServices.addSkier(skier);
 
         // Appelez la méthode retrieveSkier pour récupérer le skieur
-        Skier retrievedSkier = ss.retrieveSkier(skier.getNumSkier());
+        Skier retrievedSkier = skierServices.retrieveSkier(skier.getNumSkier());
 
         // Vérifiez si le skieur récupéré correspond au skieur créé
         assertEquals(skier, retrievedSkier);
@@ -103,7 +103,7 @@ public class SkierServiceImplTest {
         // Initialisez les propriétés du skieur et de la piste
 
         // Appelez la méthode assignSkierToPiste
-        Skier assignedSkier = ss.assignSkierToPiste(skier.getNumSkier(), piste.getNumPiste());
+        Skier assignedSkier = skierServices.assignSkierToPiste(skier.getNumSkier(), piste.getNumPiste());
 
         // Vérifiez si la piste a été correctement assignée au skieur
         assertTrue(assignedSkier.getPistes().contains(piste));
@@ -124,7 +124,7 @@ public class SkierServiceImplTest {
         // Ajoutez les skieurs à la base de données (utilisez votre service pour cela)
 
         // Appelez la méthode retrieveSkiersBySubscriptionType
-        List<Skier> annualSkiers = ss.retrieveSkiersBySubscriptionType(TypeSubscription.ANNUAL);
+        List<Skier> annualSkiers = skierServices.retrieveSkiersBySubscriptionType(TypeSubscription.ANNUAL);
 
         // Vérifiez si la liste contient les skieurs correspondant au type d'abonnement (dans cet exemple, les skieurs avec un abonnement annuel)
         assertEquals(1, annualSkiers.size()); // Vérifiez si le nombre de skieurs correspond à vos attentes
@@ -142,7 +142,7 @@ public class SkierServiceImplTest {
         newSkier.setSubscription(subscription);
 
         // Appelez la méthode addSkier
-        Skier addedSkier = ss.addSkier(newSkier);
+        Skier addedSkier = skierServices.addSkier(newSkier);
 
         // Vérifiez si la méthode a correctement défini la date de fin d'abonnement
         LocalDate expectedEndDate = startDate.plusYears(1);
@@ -152,7 +152,7 @@ public class SkierServiceImplTest {
     @Order(2)
     public void testRetrieveAllSkiers() {
         // Appelez la méthode pour récupérer la liste des skieurs
-        List<Skier> skiers = ss.retrieveAllSkiers();
+        List<Skier> skiers = skierServices.retrieveAllSkiers();
 
         // Assurez-vous que la liste n'est pas nulle
         assertNotNull(skiers);
