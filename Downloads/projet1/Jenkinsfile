@@ -1,0 +1,24 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Build') {
+            steps {
+                // Étape de construction
+                sh 'mvn clean package'
+            }
+        }
+        stage('Test') {
+            steps {
+                // Étape de test
+                sh 'mvn test'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                // Étape de déploiement
+                sh 'mvn deploy'
+            }
+        }
+    }
+}
